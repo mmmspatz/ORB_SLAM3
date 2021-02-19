@@ -230,7 +230,7 @@ void Atlas::RemoveBadMaps()
     /*for(Map* pMap : mspBadMaps)
     {
         delete pMap;
-        pMap = static_cast<Map*>(NULL);
+        pMap = nullptr;
     }*/
     mspBadMaps.clear();
 }

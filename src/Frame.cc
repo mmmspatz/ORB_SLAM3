@@ -136,7 +136,7 @@ Frame::Frame(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timeSt
 
     mvpMapPoints = vector<MapPoint*>(N,nullptr);
     mvbOutlier = vector<bool>(N,false);
-    mmProjectPoints.clear();// = map<long unsigned int, cv::Point2f>(N, static_cast<cv::Point2f>(NULL));
+    mmProjectPoints.clear();// = map<long unsigned int, cv::Point2f>(N);
     mmMatchedInImage.clear();
 
 
@@ -229,7 +229,7 @@ Frame::Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeSt
 
     mvpMapPoints = vector<MapPoint*>(N,nullptr);
 
-    mmProjectPoints.clear();// = map<long unsigned int, cv::Point2f>(N, static_cast<cv::Point2f>(NULL));
+    mmProjectPoints.clear();// = map<long unsigned int, cv::Point2f>(N);
     mmMatchedInImage.clear();
 
     mvbOutlier = vector<bool>(N,false);
@@ -314,7 +314,7 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
 
     mvpMapPoints = vector<MapPoint*>(N,nullptr);
 
-    mmProjectPoints.clear();// = map<long unsigned int, cv::Point2f>(N, static_cast<cv::Point2f>(NULL));
+    mmProjectPoints.clear();// = map<long unsigned int, cv::Point2f>(N);
     mmMatchedInImage.clear();
 
     mvbOutlier = vector<bool>(N,false);
