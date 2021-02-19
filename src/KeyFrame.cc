@@ -38,7 +38,7 @@ KeyFrame::KeyFrame():
         /*mBowVec(NULL), mFeatVec(NULL),*/ mnScaleLevels(0), mfScaleFactor(0),
         mfLogScaleFactor(0), mvScaleFactors(0), mvLevelSigma2(0),
         mvInvLevelSigma2(0), mnMinX(0), mnMinY(0), mnMaxX(0),
-        mnMaxY(0), /*mK(NULL),*/  mPrevKF(static_cast<KeyFrame*>(nullptr)), mNextKF(static_cast<KeyFrame*>(nullptr)), mbFirstConnection(true), mpParent(nullptr), mbNotErase(false),
+        mnMaxY(0), /*mK(NULL),*/  mPrevKF(nullptr), mbFirstConnection(true), mpParent(nullptr), mbNotErase(false),
         mbToBeErased(false), mbBad(false), mHalfBaseline(0), mbCurrentPlaceRecognition(false), mbHasHessian(false), mnMergeCorrectedForKF(0),
         NLeft(0),NRight(0), mnNumberOfOpt(0)
 {
@@ -312,7 +312,7 @@ void KeyFrame::AddMapPoint(MapPoint *pMP, const size_t &idx)
 void KeyFrame::EraseMapPointMatch(const int &idx)
 {
     unique_lock<mutex> lock(mMutexFeatures);
-    mvpMapPoints[idx]=static_cast<MapPoint*>(nullptr);
+    mvpMapPoints[idx]=nullptr;
 }
 
 void KeyFrame::EraseMapPointMatch(MapPoint* pMP)
@@ -320,9 +320,9 @@ void KeyFrame::EraseMapPointMatch(MapPoint* pMP)
     tuple<size_t,size_t> indexes = pMP->GetIndexInKeyFrame(this);
     size_t leftIndex = get<0>(indexes), rightIndex = get<1>(indexes);
     if(leftIndex != -1)
-        mvpMapPoints[leftIndex]=static_cast<MapPoint*>(nullptr);
+        mvpMapPoints[leftIndex]=nullptr;
     if(rightIndex != -1)
-        mvpMapPoints[rightIndex]=static_cast<MapPoint*>(nullptr);
+        mvpMapPoints[rightIndex]=nullptr;
 }
 
 
@@ -1001,7 +1001,7 @@ void KeyFrame::PostLoad(map<long unsigned int, KeyFrame*>& mpKFid, map<long unsi
         if(mvBackupMapPointsId[i] != -1)
             mvpMapPoints[i] = mpMPid[mvBackupMapPointsId[i]];
         else
-            mvpMapPoints[i] = static_cast<MapPoint*>(nullptr);
+            mvpMapPoints[i] = nullptr;
     }
 
     // Conected KeyFrames with him weight

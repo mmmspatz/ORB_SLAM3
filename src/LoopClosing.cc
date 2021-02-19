@@ -46,7 +46,7 @@ LoopClosing::LoopClosing(Atlas *pAtlas, KeyFrameDatabase *pDB, ORBVocabulary *pV
     mbLoopDetected(false), mbMergeDetected(false), mnLoopNumNotFound(0), mnMergeNumNotFound(0)
 {
     mnCovisibilityConsistencyTh = 3;
-    mpLastCurrentKF = static_cast<KeyFrame*>(nullptr);
+    mpLastCurrentKF = nullptr;
 }
 
 void LoopClosing::SetTracker(Tracking *pTracker)
@@ -547,7 +547,7 @@ bool LoopClosing::DetectAndReffineSim3FromLastKF(KeyFrame* pCurrentKF, KeyFrame*
                            Converter::toVector3d(mScw.rowRange(0, 3).col(3)),1.0);
 
             vector<MapPoint*> vpMatchedMP;
-            vpMatchedMP.resize(mpCurrentKF->GetMapPointMatches().size(), static_cast<MapPoint*>(nullptr));
+            vpMatchedMP.resize(mpCurrentKF->GetMapPointMatches().size(), nullptr);
 
             nNumProjMatches = FindMatchesByProjection(pCurrentKF, pMatchedKF, gScw_estimation, spAlreadyMatchedMPs, vpMPs, vpMatchedMPs);
             //cout << "REFFINE-SIM3: Projection with optimize Sim3 from last KF with " << nNumProjMatches << " matches" << endl;
@@ -619,8 +619,8 @@ bool LoopClosing::DetectCommonRegionsFromBoW(std::vector<KeyFrame*> &vpBowCand, 
         KeyFrame* pMostBoWMatchesKF = pKFi;
         int nMostBoWNumMatches = 0;
 
-        std::vector<MapPoint*> vpMatchedPoints = std::vector<MapPoint*>(mpCurrentKF->GetMapPointMatches().size(), static_cast<MapPoint*>(nullptr));
-        std::vector<KeyFrame*> vpKeyFrameMatchedMP = std::vector<KeyFrame*>(mpCurrentKF->GetMapPointMatches().size(), static_cast<KeyFrame*>(nullptr));
+        std::vector<MapPoint*> vpMatchedPoints = std::vector<MapPoint*>(mpCurrentKF->GetMapPointMatches().size(), nullptr);
+        std::vector<KeyFrame*> vpKeyFrameMatchedMP = std::vector<KeyFrame*>(mpCurrentKF->GetMapPointMatches().size(), nullptr);
 
         int nIndexMostBoWMatchesKF=0;
         for(int j=0; j<vpCovKFi.size(); ++j)
@@ -731,9 +731,9 @@ bool LoopClosing::DetectCommonRegionsFromBoW(std::vector<KeyFrame*> &vpBowCand, 
 
 
                 vector<MapPoint*> vpMatchedMP;
-                vpMatchedMP.resize(mpCurrentKF->GetMapPointMatches().size(), static_cast<MapPoint*>(nullptr));
+                vpMatchedMP.resize(mpCurrentKF->GetMapPointMatches().size(), nullptr);
                 vector<KeyFrame*> vpMatchedKF;
-                vpMatchedKF.resize(mpCurrentKF->GetMapPointMatches().size(), static_cast<KeyFrame*>(nullptr));
+                vpMatchedKF.resize(mpCurrentKF->GetMapPointMatches().size(), nullptr);
                 int numProjMatches = matcher.SearchByProjection(mpCurrentKF, mScw, vpMapPoints, vpKeyFrames, vpMatchedMP, vpMatchedKF, 8, 1.5);
                 cout <<"BoW: " << numProjMatches << " matches between " << vpMapPoints.size() << " points with coarse Sim3" << endl;
 
@@ -758,7 +758,7 @@ bool LoopClosing::DetectCommonRegionsFromBoW(std::vector<KeyFrame*> &vpBowCand, 
                         cv::Mat mScw = Converter::toCvMat(gScw);
 
                         vector<MapPoint*> vpMatchedMP;
-                        vpMatchedMP.resize(mpCurrentKF->GetMapPointMatches().size(), static_cast<MapPoint*>(nullptr));
+                        vpMatchedMP.resize(mpCurrentKF->GetMapPointMatches().size(), nullptr);
                         int numProjOptMatches = matcher.SearchByProjection(mpCurrentKF, mScw, vpMapPoints, vpMatchedMP, 5, 1.0);
                         //cout <<"BoW: " << numProjOptMatches << " matches after of the Sim3 optimization" << endl;
 
@@ -1011,7 +1011,7 @@ int LoopClosing::FindMatchesByProjection(KeyFrame* pCurrentKF, KeyFrame* pMatche
 
     ORBmatcher matcher(0.9, true);
 
-    vpMatchedMapPoints.resize(pCurrentKF->GetMapPointMatches().size(), static_cast<MapPoint*>(nullptr));
+    vpMatchedMapPoints.resize(pCurrentKF->GetMapPointMatches().size(), nullptr);
     int num_matches = matcher.SearchByProjection(pCurrentKF, mScw, vpMapPoints, vpMatchedMapPoints, 3, 1.5);
 
     return num_matches;
@@ -2303,7 +2303,7 @@ void LoopClosing::SearchAndFuse(const KeyFrameAndPose &CorrectedPosesMap, vector
         g2o::Sim3 g2oScw = mit->second;
         cv::Mat cvScw = Converter::toCvMat(g2oScw);
 
-        vector<MapPoint*> vpReplacePoints(vpMapPoints.size(),static_cast<MapPoint*>(nullptr));
+        vector<MapPoint*> vpReplacePoints(vpMapPoints.size(),nullptr);
         int numFused = matcher.Fuse(pKFi,cvScw,vpMapPoints,4,vpReplacePoints);
 
         // Get Map Mutex
@@ -2343,7 +2343,7 @@ void LoopClosing::SearchAndFuse(const vector<KeyFrame*> &vConectedKFs, vector<Ma
         Map* pMap = pKF->GetMap();
         cv::Mat cvScw = pKF->GetPose();
 
-        vector<MapPoint*> vpReplacePoints(vpMapPoints.size(),static_cast<MapPoint*>(nullptr));
+        vector<MapPoint*> vpReplacePoints(vpMapPoints.size(),nullptr);
         matcher.Fuse(pKF,cvScw,vpMapPoints,4,vpReplacePoints);
 
         // Get Map Mutex

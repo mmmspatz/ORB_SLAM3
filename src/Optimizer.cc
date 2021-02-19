@@ -3843,11 +3843,11 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
+            vpMatches1[idx]=nullptr;
             optimizer.removeEdge(e12);
             optimizer.removeEdge(e21);
-            vpEdges12[i]=static_cast<g2o::EdgeSim3ProjectXYZ*>(nullptr);
-            vpEdges21[i]=static_cast<g2o::EdgeInverseSim3ProjectXYZ*>(nullptr);
+            vpEdges12[i]=nullptr;
+            vpEdges21[i]=nullptr;
             nBad++;
         }
     }
@@ -3877,7 +3877,7 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
+            vpMatches1[idx]=nullptr;
         }
         else
             nIn++;
@@ -4104,11 +4104,11 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
+            vpMatches1[idx]=nullptr;
             optimizer.removeEdge(e12);
             optimizer.removeEdge(e21);
-            vpEdges12[i]=static_cast<ORB_SLAM3::EdgeSim3ProjectXYZ*>(nullptr);
-            vpEdges21[i]=static_cast<ORB_SLAM3::EdgeInverseSim3ProjectXYZ*>(nullptr);
+            vpEdges12[i]=nullptr;
+            vpEdges21[i]=nullptr;
             nBad++;
 
             if(!vbIsInKF2[i])
@@ -4154,7 +4154,7 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
+            vpMatches1[idx]=nullptr;
         }
         else
         {
@@ -4354,11 +4354,11 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
+            vpMatches1[idx]=nullptr;
             optimizer.removeEdge(e12);
             optimizer.removeEdge(e21);
-            vpEdges12[i]=static_cast<ORB_SLAM3::EdgeSim3ProjectXYZ*>(nullptr);
-            vpEdges21[i]=static_cast<ORB_SLAM3::EdgeInverseSim3ProjectXYZ*>(nullptr);
+            vpEdges12[i]=nullptr;
+            vpEdges21[i]=nullptr;
             nBad++;
             continue;
         }
@@ -4399,7 +4399,7 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
+            vpMatches1[idx]=nullptr;
         }
         else
         {
@@ -8289,7 +8289,7 @@ void Optimizer::OptimizeEssentialGraph4DoF(Map* pMap, KeyFrame* pLoopKF, KeyFram
 
 
         // 1.1.0 Spanning tree edge
-        KeyFrame* pParentKF = static_cast<KeyFrame*>(nullptr);
+        KeyFrame* pParentKF = nullptr;
         if(pParentKF)
         {
             int nIDj = pParentKF->mnId;

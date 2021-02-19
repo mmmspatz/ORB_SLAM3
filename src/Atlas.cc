@@ -27,12 +27,12 @@ namespace ORB_SLAM3
 {
 
 Atlas::Atlas(){
-    mpCurrentMap = static_cast<Map*>(nullptr);
+    mpCurrentMap = nullptr;
 }
 
 Atlas::Atlas(int initKFid): mnLastInitKFidMap(initKFid), mHasViewer(false)
 {
-    mpCurrentMap = static_cast<Map*>(nullptr);
+    mpCurrentMap = nullptr;
     CreateNewMap();
 }
 
@@ -45,7 +45,7 @@ Atlas::~Atlas()
         if(pMi)
         {
             delete pMi;
-            pMi = static_cast<Map*>(nullptr);
+            pMi = nullptr;
 
             it = mspMaps.erase(it);
         }
@@ -202,7 +202,7 @@ void Atlas::clearAtlas()
         delete *it;
     }*/
     mspMaps.clear();
-    mpCurrentMap = static_cast<Map*>(nullptr);
+    mpCurrentMap = nullptr;
     mnLastInitKFidMap = 0;
 }
 
