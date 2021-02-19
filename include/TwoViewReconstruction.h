@@ -43,7 +43,7 @@ public:
 private:
 
     void FindHomography(std::vector<bool> &vbMatchesInliers, float &score, cv::Mat &H21);
-    void FindFundamental(std::vector<bool> &vbInliers, float &score, cv::Mat &F21);
+    void FindFundamental(std::vector<bool> &vbMatchesInliers, float &score, cv::Mat &F21);
 
     cv::Mat ComputeH21(const std::vector<cv::Point2f> &vP1, const std::vector<cv::Point2f> &vP2);
     cv::Mat ComputeF21(const std::vector<cv::Point2f> &vP1, const std::vector<cv::Point2f> &vP2);
@@ -64,7 +64,7 @@ private:
 
 
     int CheckRT(const cv::Mat &R, const cv::Mat &t, const std::vector<cv::KeyPoint> &vKeys1, const std::vector<cv::KeyPoint> &vKeys2,
-                       const std::vector<Match> &vMatches12, std::vector<bool> &vbInliers,
+                       const std::vector<Match> &vMatches12, std::vector<bool> &vbMatchesInliers,
                        const cv::Mat &K, std::vector<cv::Point3f> &vP3D, float th2, std::vector<bool> &vbGood, float &parallax);
 
     void DecomposeE(const cv::Mat &E, cv::Mat &R1, cv::Mat &R2, cv::Mat &t);

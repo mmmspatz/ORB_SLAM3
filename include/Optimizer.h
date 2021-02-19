@@ -52,7 +52,7 @@ public:
                                  const bool bRobust = true);
     void static GlobalBundleAdjustemnt(Map* pMap, int nIterations=5, bool *pbStopFlag=nullptr,
                                        const unsigned long nLoopKF=0, const bool bRobust = true);
-    void static FullInertialBA(Map *pMap, int its, const bool bFixLocal=false, const unsigned long nLoopKF=0, bool *pbStopFlag=nullptr, bool bInit=false, float priorG = 1e2, float priorA=1e6, Eigen::VectorXd *vSingVal = nullptr, bool *bHess=nullptr);
+    void static FullInertialBA(Map *pMap, int its, const bool bFixLocal=false, const unsigned long nLoopId=0, bool *pbStopFlag=nullptr, bool bInit=false, float priorG = 1e2, float priorA=1e6, Eigen::VectorXd *vSingVal = nullptr, bool *bHess=nullptr);
 
     void static LocalBundleAdjustment(KeyFrame* pKF, bool *pbStopFlag, vector<KeyFrame*> &vpNonEnoughOptKFs);
     void static LocalBundleAdjustment(KeyFrame* pKF, bool *pbStopFlag, Map *pMap, int& num_fixedKF);
