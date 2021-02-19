@@ -1,0 +1,12 @@
+---
+Checks:          '-*,modernize-use-nullptr'
+WarningsAsErrors: ''
+HeaderFilterRegex: './include/*'
+AnalyzeTemporaryDtors: false
+FormatStyle:     none
+User:            mspatz
+CheckOptions:
+  - key:             modernize-use-nullptr.NullMacros
+    value:           'NULL'
+...
+

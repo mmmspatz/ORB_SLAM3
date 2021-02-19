@@ -163,7 +163,7 @@ void Optimizer::BundleAdjustment(const vector<KeyFrame *> &vpKFs, const vector<M
             KeyFrame* pKF = mit->first;
             if(pKF->isBad() || pKF->mnId>maxKFid)
                 continue;
-            if(optimizer.vertex(id) == NULL || optimizer.vertex(pKF->mnId) == NULL)
+            if(optimizer.vertex(id) == nullptr || optimizer.vertex(pKF->mnId) == nullptr)
                 continue;
             nEdges++;
 
@@ -1097,7 +1097,7 @@ int Optimizer::PoseOptimization(Frame *pFrame)
             }
 
             if(it==2)
-                e->setRobustKernel(0);
+                e->setRobustKernel(nullptr);
         }
 
         for(size_t i=0, iend=vpEdgesMono_FHR.size(); i<iend; i++)
@@ -1126,7 +1126,7 @@ int Optimizer::PoseOptimization(Frame *pFrame)
             }
 
             if(it==2)
-                e->setRobustKernel(0);
+                e->setRobustKernel(nullptr);
         }
 
         for(size_t i=0, iend=vpEdgesStereo.size(); i<iend; i++)
@@ -1155,7 +1155,7 @@ int Optimizer::PoseOptimization(Frame *pFrame)
             }
 
             if(it==2)
-                e->setRobustKernel(0);
+                e->setRobustKernel(nullptr);
         }
 
         if(optimizer.edges().size()<10)
@@ -3843,11 +3843,11 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(NULL);
+            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
             optimizer.removeEdge(e12);
             optimizer.removeEdge(e21);
-            vpEdges12[i]=static_cast<g2o::EdgeSim3ProjectXYZ*>(NULL);
-            vpEdges21[i]=static_cast<g2o::EdgeInverseSim3ProjectXYZ*>(NULL);
+            vpEdges12[i]=static_cast<g2o::EdgeSim3ProjectXYZ*>(nullptr);
+            vpEdges21[i]=static_cast<g2o::EdgeInverseSim3ProjectXYZ*>(nullptr);
             nBad++;
         }
     }
@@ -3877,7 +3877,7 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(NULL);
+            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
         }
         else
             nIn++;
@@ -4104,11 +4104,11 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(NULL);
+            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
             optimizer.removeEdge(e12);
             optimizer.removeEdge(e21);
-            vpEdges12[i]=static_cast<ORB_SLAM3::EdgeSim3ProjectXYZ*>(NULL);
-            vpEdges21[i]=static_cast<ORB_SLAM3::EdgeInverseSim3ProjectXYZ*>(NULL);
+            vpEdges12[i]=static_cast<ORB_SLAM3::EdgeSim3ProjectXYZ*>(nullptr);
+            vpEdges21[i]=static_cast<ORB_SLAM3::EdgeInverseSim3ProjectXYZ*>(nullptr);
             nBad++;
 
             if(!vbIsInKF2[i])
@@ -4119,8 +4119,8 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         }
 
         //Check if remove the robust adjustment improve the result
-        e12->setRobustKernel(0);
-        e21->setRobustKernel(0);
+        e12->setRobustKernel(nullptr);
+        e21->setRobustKernel(nullptr);
     }
 
     Verbose::PrintMess("Sim3: First Opt -> Correspondences: " + to_string(nCorrespondences) + "; nBad: " + to_string(nBad) + "; nBadOutKF2: " + to_string(nBadOutKF2), Verbose::VERBOSITY_DEBUG);
@@ -4154,7 +4154,7 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(NULL);
+            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
         }
         else
         {
@@ -4354,18 +4354,18 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(NULL);
+            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
             optimizer.removeEdge(e12);
             optimizer.removeEdge(e21);
-            vpEdges12[i]=static_cast<ORB_SLAM3::EdgeSim3ProjectXYZ*>(NULL);
-            vpEdges21[i]=static_cast<ORB_SLAM3::EdgeInverseSim3ProjectXYZ*>(NULL);
+            vpEdges12[i]=static_cast<ORB_SLAM3::EdgeSim3ProjectXYZ*>(nullptr);
+            vpEdges21[i]=static_cast<ORB_SLAM3::EdgeInverseSim3ProjectXYZ*>(nullptr);
             nBad++;
             continue;
         }
 
         //Check if remove the robust adjustment improve the result
-        e12->setRobustKernel(0);
-        e21->setRobustKernel(0);
+        e12->setRobustKernel(nullptr);
+        e21->setRobustKernel(nullptr);
     }
 
     //cout << "Sim3 -> Correspondences: " << nCorrespondences << "; nBad: " << nBad << endl;
@@ -4399,7 +4399,7 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         if(e12->chi2()>th2 || e21->chi2()>th2)
         {
             size_t idx = vnIndexEdge[i];
-            vpMatches1[idx]=static_cast<MapPoint*>(NULL);
+            vpMatches1[idx]=static_cast<MapPoint*>(nullptr);
         }
         else
         {
@@ -4626,9 +4626,9 @@ void Optimizer::LocalInertialBA(KeyFrame *pKF, bool *pbStopFlag, Map *pMap, bool
     }
 
     // Create intertial constraints
-    vector<EdgeInertial*> vei(N,(EdgeInertial*)NULL);
-    vector<EdgeGyroRW*> vegr(N,(EdgeGyroRW*)NULL);
-    vector<EdgeAccRW*> vear(N,(EdgeAccRW*)NULL);
+    vector<EdgeInertial*> vei(N,(EdgeInertial*)nullptr);
+    vector<EdgeGyroRW*> vegr(N,(EdgeGyroRW*)nullptr);
+    vector<EdgeAccRW*> vear(N,(EdgeAccRW*)nullptr);
 
     for(int i=0;i<N;i++)
     {
@@ -6002,7 +6002,7 @@ void Optimizer::MergeBundleAdjustmentVisual(KeyFrame* pCurrentKF, vector<KeyFram
                 e->setLevel(1);
             }
 
-            e->setRobustKernel(0);
+            e->setRobustKernel(nullptr);
         }
 
         for(size_t i=0, iend=vpEdgesStereo.size(); i<iend;i++)
@@ -6018,7 +6018,7 @@ void Optimizer::MergeBundleAdjustmentVisual(KeyFrame* pCurrentKF, vector<KeyFram
                 e->setLevel(1);
             }
 
-            e->setRobustKernel(0);
+            e->setRobustKernel(nullptr);
         }
 
     // Optimize again without the outliers
@@ -6411,7 +6411,7 @@ void Optimizer::LocalBundleAdjustment(KeyFrame* pMainKF,vector<KeyFrame*> vpAdju
                 badMonoMP++;
             }
 
-            e->setRobustKernel(0);
+            e->setRobustKernel(nullptr);
         }
 
         for(size_t i=0, iend=vpEdgesStereo.size(); i<iend;i++)
@@ -6428,7 +6428,7 @@ void Optimizer::LocalBundleAdjustment(KeyFrame* pMainKF,vector<KeyFrame*> vpAdju
                 badStereoMP++;
             }
 
-            e->setRobustKernel(0);
+            e->setRobustKernel(nullptr);
         }
         Verbose::PrintMess("LBA: First optimization, there are " + to_string(badMonoMP) + " monocular and " + to_string(badStereoMP) + " sterero bad edges", Verbose::VERBOSITY_DEBUG);
 
@@ -7003,9 +7003,9 @@ void Optimizer::MergeInertialBA(KeyFrame* pCurrKF, KeyFrame* pMergeKF, bool *pbS
     }
 
     // Create intertial constraints
-    vector<EdgeInertial*> vei(N,(EdgeInertial*)NULL);
-    vector<EdgeGyroRW*> vegr(N,(EdgeGyroRW*)NULL);
-    vector<EdgeAccRW*> vear(N,(EdgeAccRW*)NULL);
+    vector<EdgeInertial*> vei(N,(EdgeInertial*)nullptr);
+    vector<EdgeGyroRW*> vegr(N,(EdgeGyroRW*)nullptr);
+    vector<EdgeAccRW*> vear(N,(EdgeAccRW*)nullptr);
     for(int i=0;i<N;i++)
     {
         //cout << "inserting inertial edge " << i << endl;
@@ -7147,7 +7147,7 @@ void Optimizer::MergeInertialBA(KeyFrame* pCurrKF, KeyFrame* pMergeKF, bool *pbS
             }
 
 
-            if(optimizer.vertex(id)==NULL || optimizer.vertex(pKFi->mnId)==NULL)
+            if(optimizer.vertex(id)==nullptr || optimizer.vertex(pKFi->mnId)==nullptr)
                 continue;
 
             if(!pKFi->isBad())
@@ -7600,7 +7600,7 @@ int Optimizer::PoseInertialOptimizationLastKeyFrame(Frame *pFrame, bool bRecInit
             }
 
             if (it==2)
-                e->setRobustKernel(0);
+                e->setRobustKernel(nullptr);
         }
 
         // For stereo observations
@@ -7631,7 +7631,7 @@ int Optimizer::PoseInertialOptimizationLastKeyFrame(Frame *pFrame, bool bRecInit
             }
 
             if(it==2)
-                e->setRobustKernel(0);
+                e->setRobustKernel(nullptr);
         }
 
         nInliers = nInliersMono + nInliersStereo;
@@ -8008,7 +8008,7 @@ int Optimizer::PoseInertialOptimizationLastFrame(Frame *pFrame, bool bRecInit)
             }
 
             if (it==2)
-                e->setRobustKernel(0);
+                e->setRobustKernel(nullptr);
 
         }
 
@@ -8039,7 +8039,7 @@ int Optimizer::PoseInertialOptimizationLastFrame(Frame *pFrame, bool bRecInit)
             }
 
             if(it==2)
-                e->setRobustKernel(0);
+                e->setRobustKernel(nullptr);
         }
 
         nInliers = nInliersMono + nInliersStereo;
@@ -8147,7 +8147,7 @@ int Optimizer::PoseInertialOptimizationLastFrame(Frame *pFrame, bool bRecInit)
 
     pFrame->mpcpi = new ConstraintPoseImu(VP->estimate().Rwb,VP->estimate().twb,VV->estimate(),VG->estimate(),VA->estimate(),H.block<15,15>(15,15));
     delete pFp->mpcpi;
-    pFp->mpcpi = NULL;
+    pFp->mpcpi = nullptr;
 
     return nInitialCorrespondences-nBad;
 }
@@ -8289,7 +8289,7 @@ void Optimizer::OptimizeEssentialGraph4DoF(Map* pMap, KeyFrame* pLoopKF, KeyFram
 
 
         // 1.1.0 Spanning tree edge
-        KeyFrame* pParentKF = static_cast<KeyFrame*>(NULL);
+        KeyFrame* pParentKF = static_cast<KeyFrame*>(nullptr);
         if(pParentKF)
         {
             int nIDj = pParentKF->mnId;

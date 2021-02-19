@@ -62,7 +62,7 @@ namespace ORB_SLAM3
 
 
 PnPsolver::PnPsolver(const Frame &F, const vector<MapPoint*> &vpMapPointMatches):
-    pws(0), us(0), alphas(0), pcs(0), maximum_number_of_correspondences(0), number_of_correspondences(0), mnInliersi(0),
+    pws(nullptr), us(nullptr), alphas(nullptr), pcs(nullptr), maximum_number_of_correspondences(0), number_of_correspondences(0), mnInliersi(0),
     mnIterations(0), mnBestInliers(0), N(0)
 {
     mvpMapPointMatches = vpMapPointMatches;
@@ -339,10 +339,10 @@ void PnPsolver::CheckInliers()
 void PnPsolver::set_maximum_number_of_correspondences(int n)
 {
   if (maximum_number_of_correspondences < n) {
-    if (pws != 0) delete [] pws;
-    if (us != 0) delete [] us;
-    if (alphas != 0) delete [] alphas;
-    if (pcs != 0) delete [] pcs;
+    if (pws != nullptr) delete [] pws;
+    if (us != nullptr) delete [] us;
+    if (alphas != nullptr) delete [] alphas;
+    if (pcs != nullptr) delete [] pcs;
 
     maximum_number_of_correspondences = n;
     pws = new double[3 * maximum_number_of_correspondences];
@@ -394,7 +394,7 @@ void PnPsolver::choose_control_points(void)
       PW0->data.db[3 * i + j] = pws[3 * i + j] - cws[0][j];
 
   cvMulTransposed(PW0, &PW0tPW0, 1);
-  cvSVD(&PW0tPW0, &DC, &UCt, 0, CV_SVD_MODIFY_A | CV_SVD_U_T);
+  cvSVD(&PW0tPW0, &DC, &UCt, nullptr, CV_SVD_MODIFY_A | CV_SVD_U_T);
 
   cvReleaseMat(&PW0);
 
@@ -487,7 +487,7 @@ double PnPsolver::compute_pose(double R[3][3], double t[3])
   CvMat Ut  = cvMat(12, 12, CV_64F, ut);
 
   cvMulTransposed(M, &MtM, 1);
-  cvSVD(&MtM, &D, &Ut, 0, CV_SVD_MODIFY_A | CV_SVD_U_T);
+  cvSVD(&MtM, &D, &Ut, nullptr, CV_SVD_MODIFY_A | CV_SVD_U_T);
   cvReleaseMat(&M);
 
   double l_6x10[6 * 10], rho[6];

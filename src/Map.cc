@@ -33,19 +33,19 @@ namespace ORB_SLAM3
 
 long unsigned int Map::nNextId=0;
 
-Map::Map():mnMaxKFid(0),mnBigChangeIdx(0), mbImuInitialized(false), mnMapChange(0), mpFirstRegionKF(static_cast<KeyFrame*>(NULL)),
+Map::Map():mnMaxKFid(0),mnBigChangeIdx(0), mbImuInitialized(false), mnMapChange(0), mpFirstRegionKF(static_cast<KeyFrame*>(nullptr)),
 mbFail(false), mIsInUse(false), mHasTumbnail(false), mbBad(false), mnMapChangeNotified(0), mbIsInertial(false), mbIMU_BA1(false), mbIMU_BA2(false)
 {
     mnId=nNextId++;
-    mThumbnail = static_cast<GLubyte*>(NULL);
+    mThumbnail = static_cast<GLubyte*>(nullptr);
 }
 
 Map::Map(int initKFid):mnInitKFid(initKFid), mnMaxKFid(initKFid),mnLastLoopKFid(initKFid), mnBigChangeIdx(0), mIsInUse(false),
-                       mHasTumbnail(false), mbBad(false), mbImuInitialized(false), mpFirstRegionKF(static_cast<KeyFrame*>(NULL)),
+                       mHasTumbnail(false), mbBad(false), mbImuInitialized(false), mpFirstRegionKF(static_cast<KeyFrame*>(nullptr)),
                        mnMapChange(0), mbFail(false), mnMapChangeNotified(0), mbIsInertial(false), mbIMU_BA1(false), mbIMU_BA2(false)
 {
     mnId=nNextId++;
-    mThumbnail = static_cast<GLubyte*>(NULL);
+    mThumbnail = static_cast<GLubyte*>(nullptr);
 }
 
 Map::~Map()
@@ -58,7 +58,7 @@ Map::~Map()
 
     if(mThumbnail)
         delete mThumbnail;
-    mThumbnail = static_cast<GLubyte*>(NULL);
+    mThumbnail = static_cast<GLubyte*>(nullptr);
 
     mvpReferenceMapPoints.clear();
     mvpKeyFrameOrigins.clear();
@@ -126,7 +126,7 @@ void Map::EraseKeyFrame(KeyFrame *pKF)
     }
     else
     {
-        mpKFlowerID = 0;
+        mpKFlowerID = nullptr;
     }
 
     // TODO: This only erase the pointer.
@@ -226,7 +226,7 @@ void Map::clear()
     for(set<KeyFrame*>::iterator sit=mspKeyFrames.begin(), send=mspKeyFrames.end(); sit!=send; sit++)
     {
         KeyFrame* pKF = *sit;
-        pKF->UpdateMap(static_cast<Map*>(NULL));
+        pKF->UpdateMap(static_cast<Map*>(nullptr));
 //        delete *sit;
     }
 
