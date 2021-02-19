@@ -483,8 +483,8 @@ bool Initializer::ReconstructF(vector<bool> &vbMatchesInliers, cv::Mat &F21, cv:
                             cv::Mat &R21, cv::Mat &t21, vector<cv::Point3f> &vP3D, vector<bool> &vbTriangulated, float minParallax, int minTriangulated)
 {
     int N=0;
-    for(size_t i=0, iend = vbMatchesInliers.size() ; i<iend; i++)
-        if(vbMatchesInliers[i])
+    for(auto && vbMatchesInlier : vbMatchesInliers)
+        if(vbMatchesInlier)
             N++;
 
     // Compute Essential Matrix from Fundamental Matrix
@@ -585,8 +585,8 @@ bool Initializer::ReconstructH(vector<bool> &vbMatchesInliers, cv::Mat &H21, cv:
                       cv::Mat &R21, cv::Mat &t21, vector<cv::Point3f> &vP3D, vector<bool> &vbTriangulated, float minParallax, int minTriangulated)
 {
     int N=0;
-    for(size_t i=0, iend = vbMatchesInliers.size() ; i<iend; i++)
-        if(vbMatchesInliers[i])
+    for(auto && vbMatchesInlier : vbMatchesInliers)
+        if(vbMatchesInlier)
             N++;
 
     // We recover 8 motion hypotheses using the method of Faugeras et al.

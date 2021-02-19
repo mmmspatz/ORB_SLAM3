@@ -223,9 +223,8 @@ void Map::clear()
 //    for(set<MapPoint*>::iterator sit=mspMapPoints.begin(), send=mspMapPoints.end(); sit!=send; sit++)
 //        delete *sit;
 
-    for(set<KeyFrame*>::iterator sit=mspKeyFrames.begin(), send=mspKeyFrames.end(); sit!=send; sit++)
+    for(auto pKF : mspKeyFrames)
     {
-        KeyFrame* pKF = *sit;
         pKF->UpdateMap(nullptr);
 //        delete *sit;
     }
@@ -273,9 +272,8 @@ void Map::RotateMap(const cv::Mat &R)
     cv::Mat Ryw = Tyw.rowRange(0,3).colRange(0,3);
     cv::Mat tyw = Tyw.rowRange(0,3).col(3);
 
-    for(set<KeyFrame*>::iterator sit=mspKeyFrames.begin(); sit!=mspKeyFrames.end(); sit++)
+    for(auto pKF : mspKeyFrames)
     {
-        KeyFrame* pKF = *sit;
         cv::Mat Twc = pKF->GetPoseInverse();
         cv::Mat Tyc = Tyw*Twc;
         cv::Mat Tcy = cv::Mat::eye(4,4,CV_32F);
@@ -285,9 +283,8 @@ void Map::RotateMap(const cv::Mat &R)
         cv::Mat Vw = pKF->GetVelocity();
         pKF->SetVelocity(Ryw*Vw);
     }
-    for(set<MapPoint*>::iterator sit=mspMapPoints.begin(); sit!=mspMapPoints.end(); sit++)
+    for(auto pMP : mspMapPoints)
     {
-        MapPoint* pMP = *sit;
         pMP->SetWorldPos(Ryw*pMP->GetWorldPos()+tyw);
         pMP->UpdateNormalAndDepth();
     }
@@ -308,9 +305,8 @@ void Map::ApplyScaledRotation(const cv::Mat &R, const float s, const bool bScale
     cv::Mat Ryw = Tyw.rowRange(0,3).colRange(0,3);
     cv::Mat tyw = Tyw.rowRange(0,3).col(3);
 
-    for(set<KeyFrame*>::iterator sit=mspKeyFrames.begin(); sit!=mspKeyFrames.end(); sit++)
+    for(auto pKF : mspKeyFrames)
     {
-        KeyFrame* pKF = *sit;
         cv::Mat Twc = pKF->GetPoseInverse();
         Twc.rowRange(0,3).col(3)*=s;
         cv::Mat Tyc = Tyw*Twc;
@@ -325,9 +321,8 @@ void Map::ApplyScaledRotation(const cv::Mat &R, const float s, const bool bScale
             pKF->SetVelocity(Ryw*Vw*s);
 
     }
-    for(set<MapPoint*>::iterator sit=mspMapPoints.begin(); sit!=mspMapPoints.end(); sit++)
+    for(auto pMP : mspMapPoints)
     {
-        MapPoint* pMP = *sit;
         pMP->SetWorldPos(s*Ryw*pMP->GetWorldPos()+tyw);
         pMP->UpdateNormalAndDepth();
     }
@@ -551,11 +546,11 @@ void Map::PreSave(std::set<GeometricCamera*> &spCams)
             nMPWithoutObs++;
         }
         map<KeyFrame*, std::tuple<int,int>> mpObs = pMPi->GetObservations();
-        for(map<KeyFrame*, std::tuple<int,int>>::iterator it= mpObs.begin(), end=mpObs.end(); it!=end; ++it)
+        for(auto & mpOb : mpObs)
         {
-            if(it->first->GetMap() != this)
+            if(mpOb.first->GetMap() != this)
             {
-                pMPi->EraseObservation(it->first); //We need to find where the KF is set as Bad but the observation is not removed
+                pMPi->EraseObservation(mpOb.first); //We need to find where the KF is set as Bad but the observation is not removed
             }
 
         }
@@ -564,9 +559,9 @@ void Map::PreSave(std::set<GeometricCamera*> &spCams)
 
     // Saves the id of KF origins
     mvBackupKeyFrameOriginsId.reserve(mvpKeyFrameOrigins.size());
-    for(int i = 0, numEl = mvpKeyFrameOrigins.size(); i < numEl; ++i)
+    for(auto & mvpKeyFrameOrigin : mvpKeyFrameOrigins)
     {
-        mvBackupKeyFrameOriginsId.push_back(mvpKeyFrameOrigins[i]->mnId);
+        mvBackupKeyFrameOriginsId.push_back(mvpKeyFrameOrigin->mnId);
     }
 
     mvpBackupMapPoints.clear();

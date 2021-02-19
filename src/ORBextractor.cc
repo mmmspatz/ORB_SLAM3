@@ -469,10 +469,9 @@ namespace ORB_SLAM3
 
     static void computeOrientation(const Mat& image, vector<KeyPoint>& keypoints, const vector<int>& umax)
     {
-        for (vector<KeyPoint>::iterator keypoint = keypoints.begin(),
-                     keypointEnd = keypoints.end(); keypoint != keypointEnd; ++keypoint)
+        for (auto & keypoint : keypoints)
         {
-            keypoint->angle = IC_Angle(image, keypoint->pt, umax);
+            keypoint.angle = IC_Angle(image, keypoint.pt, umax);
         }
     }
 
@@ -507,9 +506,8 @@ namespace ORB_SLAM3
         n4.vKeys.reserve(vKeys.size());
 
         //Associate points to childs
-        for(size_t i=0;i<vKeys.size();i++)
+        for(auto & kp : vKeys)
         {
-            const cv::KeyPoint &kp = vKeys[i];
             if(kp.pt.x<n1.UR.x)
             {
                 if(kp.pt.y<n1.BR.y)
@@ -561,9 +559,8 @@ namespace ORB_SLAM3
         }
 
         //Associate points to childs
-        for(size_t i=0;i<vToDistributeKeys.size();i++)
+        for(const auto & kp : vToDistributeKeys)
         {
-            const cv::KeyPoint &kp = vToDistributeKeys[i];
             vpIniNodes[kp.pt.x/hX]->vKeys.push_back(kp);
         }
 
@@ -739,9 +736,9 @@ namespace ORB_SLAM3
         // Retain the best point in each node
         vector<cv::KeyPoint> vResultKeys;
         vResultKeys.reserve(nfeatures);
-        for(list<ExtractorNode>::iterator lit=lNodes.begin(); lit!=lNodes.end(); lit++)
+        for(auto & lNode : lNodes)
         {
-            vector<cv::KeyPoint> &vNodeKeys = lit->vKeys;
+            vector<cv::KeyPoint> &vNodeKeys = lNode.vKeys;
             cv::KeyPoint* pKP = &vNodeKeys[0];
             float maxResponse = pKP->response;
 
@@ -842,11 +839,11 @@ namespace ORB_SLAM3
 
                     if(!vKeysCell.empty())
                     {
-                        for(vector<cv::KeyPoint>::iterator vit=vKeysCell.begin(); vit!=vKeysCell.end();vit++)
+                        for(auto & vit : vKeysCell)
                         {
-                            (*vit).pt.x+=j*wCell;
-                            (*vit).pt.y+=i*hCell;
-                            vToDistributeKeys.push_back(*vit);
+                            vit.pt.x+=j*wCell;
+                            vit.pt.y+=i*hCell;
+                            vToDistributeKeys.push_back(vit);
                         }
                     }
 
@@ -1033,13 +1030,13 @@ namespace ORB_SLAM3
                         keysCell.resize(nToRetain[i][j]);
 
 
-                    for(size_t k=0, kend=keysCell.size(); k<kend; k++)
+                    for(auto & k : keysCell)
                     {
-                        keysCell[k].pt.x+=iniXCol[j];
-                        keysCell[k].pt.y+=iniYRow[i];
-                        keysCell[k].octave=level;
-                        keysCell[k].size = scaledPatchSize;
-                        keypoints.push_back(keysCell[k]);
+                        k.pt.x+=iniXCol[j];
+                        k.pt.y+=iniYRow[i];
+                        k.octave=level;
+                        k.size = scaledPatchSize;
+                        keypoints.push_back(k);
                     }
                 }
             }
@@ -1124,21 +1121,20 @@ namespace ORB_SLAM3
 
             float scale = mvScaleFactor[level]; //getScale(level, firstLevel, scaleFactor);
             int i = 0;
-            for (vector<KeyPoint>::iterator keypoint = keypoints.begin(),
-                         keypointEnd = keypoints.end(); keypoint != keypointEnd; ++keypoint){
+            for (auto & keypoint : keypoints){
 
                 // Scale keypoint coordinates
                 if (level != 0){
-                    keypoint->pt *= scale;
+                    keypoint.pt *= scale;
                 }
 
-                if(keypoint->pt.x >= vLappingArea[0] && keypoint->pt.x <= vLappingArea[1]){
-                    _keypoints.at(stereoIndex) = (*keypoint);
+                if(keypoint.pt.x >= vLappingArea[0] && keypoint.pt.x <= vLappingArea[1]){
+                    _keypoints.at(stereoIndex) = keypoint;
                     desc.row(i).copyTo(descriptors.row(stereoIndex));
                     stereoIndex--;
                 }
                 else{
-                    _keypoints.at(monoIndex) = (*keypoint);
+                    _keypoints.at(monoIndex) = keypoint;
                     desc.row(i).copyTo(descriptors.row(monoIndex));
                     monoIndex++;
                 }

@@ -1072,10 +1072,8 @@ void LoopClosing::CorrectLoop()
 
         const bool bImuInit = pLoopMap->isImuInitialized();
 
-        for(vector<KeyFrame*>::iterator vit=mvpCurrentConnectedKFs.begin(), vend=mvpCurrentConnectedKFs.end(); vit!=vend; vit++)
+        for(auto pKFi : mvpCurrentConnectedKFs)
         {
-            KeyFrame* pKFi = *vit;
-
             cv::Mat Tiw = pKFi->GetPose();
 
             if(pKFi!=mpCurrentKF)
@@ -1099,18 +1097,17 @@ void LoopClosing::CorrectLoop()
         // Correct all MapPoints obsrved by current keyframe and neighbors, so that they align with the other side of the loop
         cout << "LC: start correcting KeyFrames" << endl;
         cout << "LC: there are " << CorrectedSim3.size() << " KFs in the local window" << endl;
-        for(KeyFrameAndPose::iterator mit=CorrectedSim3.begin(), mend=CorrectedSim3.end(); mit!=mend; mit++)
+        for(auto & mit : CorrectedSim3)
         {
-            KeyFrame* pKFi = mit->first;
-            g2o::Sim3 g2oCorrectedSiw = mit->second;
+            KeyFrame* pKFi = mit.first;
+            g2o::Sim3 g2oCorrectedSiw = mit.second;
             g2o::Sim3 g2oCorrectedSwi = g2oCorrectedSiw.inverse();
 
             g2o::Sim3 g2oSiw =NonCorrectedSim3[pKFi];
 
             vector<MapPoint*> vpMPsi = pKFi->GetMapPointMatches();
-            for(size_t iMP=0, endMPi = vpMPsi.size(); iMP<endMPi; iMP++)
+            for(auto pMPi : vpMPsi)
             {
-                MapPoint* pMPi = vpMPsi[iMP];
                 if(!pMPi)
                     continue;
                 if(pMPi->isBad())
@@ -1199,13 +1196,13 @@ void LoopClosing::CorrectLoop()
         // Update connections. Detect new links.
         pKFi->UpdateConnections();
         LoopConnections[pKFi]=pKFi->GetConnectedKeyFrames();
-        for(vector<KeyFrame*>::iterator vit_prev=vpPreviousNeighbors.begin(), vend_prev=vpPreviousNeighbors.end(); vit_prev!=vend_prev; vit_prev++)
+        for(auto & vpPreviousNeighbor : vpPreviousNeighbors)
         {
-            LoopConnections[pKFi].erase(*vit_prev);
+            LoopConnections[pKFi].erase(vpPreviousNeighbor);
         }
-        for(vector<KeyFrame*>::iterator vit2=mvpCurrentConnectedKFs.begin(), vend2=mvpCurrentConnectedKFs.end(); vit2!=vend2; vit2++)
+        for(auto & mvpCurrentConnectedKF : mvpCurrentConnectedKFs)
         {
-            LoopConnections[pKFi].erase(*vit2);
+            LoopConnections[pKFi].erase(mvpCurrentConnectedKF);
         }
     }
     //cout << "LC: end updating covisibility graph" << endl;
@@ -2294,13 +2291,13 @@ void LoopClosing::SearchAndFuse(const KeyFrameAndPose &CorrectedPosesMap, vector
 
     cout << "FUSE: Initially there are " << vpMapPoints.size() << " MPs" << endl;
     cout << "FUSE: Intially there are " << CorrectedPosesMap.size() << " KFs" << endl;
-    for(KeyFrameAndPose::const_iterator mit=CorrectedPosesMap.begin(), mend=CorrectedPosesMap.end(); mit!=mend;mit++)
+    for(const auto & mit : CorrectedPosesMap)
     {
         int num_replaces = 0;
-        KeyFrame* pKFi = mit->first;
+        KeyFrame* pKFi = mit.first;
         Map* pMap = pKFi->GetMap();
 
-        g2o::Sim3 g2oScw = mit->second;
+        g2o::Sim3 g2oScw = mit.second;
         cv::Mat cvScw = Converter::toCvMat(g2oScw);
 
         vector<MapPoint*> vpReplacePoints(vpMapPoints.size(),nullptr);
@@ -2336,10 +2333,9 @@ void LoopClosing::SearchAndFuse(const vector<KeyFrame*> &vConectedKFs, vector<Ma
 
     cout << "FUSE-POSE: Initially there are " << vpMapPoints.size() << " MPs" << endl;
     cout << "FUSE-POSE: Intially there are " << vConectedKFs.size() << " KFs" << endl;
-    for(auto mit=vConectedKFs.begin(), mend=vConectedKFs.end(); mit!=mend;mit++)
+    for(auto pKF : vConectedKFs)
     {
         int num_replaces = 0;
-        KeyFrame* pKF = (*mit);
         Map* pMap = pKF->GetMap();
         cv::Mat cvScw = pKF->GetPose();
 
@@ -2491,9 +2487,8 @@ void LoopClosing::RunGlobalBundleAdjustment(Map* pActiveMap, unsigned long nLoop
                 cv::Mat Twc = pKF->GetPoseInverse();
                 //cout << "Twc: " << Twc << endl;
                 //cout << "GBA: Correct KeyFrames" << endl;
-                for(set<KeyFrame*>::const_iterator sit=sChilds.begin();sit!=sChilds.end();sit++)
+                for(auto pChild : sChilds)
                 {
-                    KeyFrame* pChild = *sit;
                     if(!pChild || pChild->isBad())
                         continue;
 
@@ -2602,10 +2597,8 @@ void LoopClosing::RunGlobalBundleAdjustment(Map* pActiveMap, unsigned long nLoop
             // Correct MapPoints
             const vector<MapPoint*> vpMPs = pActiveMap->GetAllMapPoints();
 
-            for(size_t i=0; i<vpMPs.size(); i++)
+            for(auto pMP : vpMPs)
             {
-                MapPoint* pMP = vpMPs[i];
-
                 if(pMP->isBad())
                     continue;
 

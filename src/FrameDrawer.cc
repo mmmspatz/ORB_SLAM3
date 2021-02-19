@@ -113,8 +113,8 @@ cv::Mat FrameDrawer::DrawFrame(bool bOldFeatures)
                         cv::Scalar(0,255,0));
             }
         }
-        for(vector<pair<cv::Point2f, cv::Point2f> >::iterator it=vTracks.begin(); it!=vTracks.end(); it++)
-            cv::line(im,(*it).first,(*it).second, cv::Scalar(0,255,0),5);
+        for(auto & vTrack : vTracks)
+            cv::line(im,vTrack.first,vTrack.second, cv::Scalar(0,255,0),5);
 
     }
     else if(state==Tracking::OK && bOldFeatures) //TRACKING

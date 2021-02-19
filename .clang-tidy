@@ -1,5 +1,5 @@
 ---
-Checks:          '-*,modernize-use-nullptr,readability-inconsistent-declaration-parameter-name,modernize-use-override'
+Checks:          '-*,modernize-use-nullptr,readability-inconsistent-declaration-parameter-name,modernize-use-override,modernize-loop-convert'
 WarningsAsErrors: ''
 HeaderFilterRegex: './include/*'
 AnalyzeTemporaryDtors: false

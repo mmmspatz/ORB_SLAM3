@@ -1807,9 +1807,8 @@ void Tracking::Track()
             }
 
             // Delete temporal MapPoints
-            for(list<MapPoint*>::iterator lit = mlpTemporalPoints.begin(), lend =  mlpTemporalPoints.end(); lit!=lend; lit++)
+            for(auto pMP : mlpTemporalPoints)
             {
-                MapPoint* pMP = *lit;
                 delete pMP;
             }
             mlpTemporalPoints.clear();
@@ -2170,11 +2169,11 @@ void Tracking::CreateInitialMapMonocular()
 
     // Scale points
     vector<MapPoint*> vpAllMapPoints = pKFini->GetMapPointMatches();
-    for(size_t iMP=0; iMP<vpAllMapPoints.size(); iMP++)
+    for(auto & vpAllMapPoint : vpAllMapPoints)
     {
-        if(vpAllMapPoints[iMP])
+        if(vpAllMapPoint)
         {
-            MapPoint* pMP = vpAllMapPoints[iMP];
+            MapPoint* pMP = vpAllMapPoint;
             pMP->SetWorldPos(pMP->GetWorldPos()*invMedianDepth);
             pMP->UpdateNormalAndDepth();
         }
@@ -2384,9 +2383,9 @@ void Tracking::UpdateLastFrame()
     // We insert all close points (depth<mThDepth)
     // If less than 100 close points, we insert the 100 closest ones.
     int nPoints = 0;
-    for(size_t j=0; j<vDepthIdx.size();j++)
+    for(auto & j : vDepthIdx)
     {
-        int i = vDepthIdx[j].second;
+        int i = j.second;
 
         bool bCreateNew = false;
 
@@ -2413,7 +2412,7 @@ void Tracking::UpdateLastFrame()
             nPoints++;
         }
 
-        if(vDepthIdx[j].first>mThDepth && nPoints>100)
+        if(j.first>mThDepth && nPoints>100)
         {
             break;
         }
@@ -2828,9 +2827,9 @@ void Tracking::CreateNewKeyFrame()
             sort(vDepthIdx.begin(),vDepthIdx.end());
 
             int nPoints = 0;
-            for(size_t j=0; j<vDepthIdx.size();j++)
+            for(auto & j : vDepthIdx)
             {
-                int i = vDepthIdx[j].second;
+                int i = j.second;
 
                 bool bCreateNew = false;
 
@@ -2878,7 +2877,7 @@ void Tracking::CreateNewKeyFrame()
                     nPoints++; // TODO check ???
                 }
 
-                if(vDepthIdx[j].first>mThDepth && nPoints>maxPoint)
+                if(j.first>mThDepth && nPoints>maxPoint)
                 {
                     break;
                 }
@@ -2902,14 +2901,14 @@ void Tracking::CreateNewKeyFrame()
 void Tracking::SearchLocalPoints()
 {
     // Do not search map points already matched
-    for(vector<MapPoint*>::iterator vit=mCurrentFrame.mvpMapPoints.begin(), vend=mCurrentFrame.mvpMapPoints.end(); vit!=vend; vit++)
+    for(auto & mvpMapPoint : mCurrentFrame.mvpMapPoints)
     {
-        MapPoint* pMP = *vit;
+        MapPoint* pMP = mvpMapPoint;
         if(pMP)
         {
             if(pMP->isBad())
             {
-                *vit = nullptr;
+                mvpMapPoint = nullptr;
             }
             else
             {
@@ -2924,10 +2923,8 @@ void Tracking::SearchLocalPoints()
     int nToMatch=0;
 
     // Project points in frame and check its visibility
-    for(vector<MapPoint*>::iterator vit=mvpLocalMapPoints.begin(), vend=mvpLocalMapPoints.end(); vit!=vend; vit++)
+    for(auto pMP : mvpLocalMapPoints)
     {
-        MapPoint* pMP = *vit;
-
         if(pMP->mnLastFrameSeen == mCurrentFrame.mnId)
             continue;
         if(pMP->isBad())
@@ -2994,10 +2991,9 @@ void Tracking::UpdateLocalPoints()
         KeyFrame* pKF = *itKF;
         const vector<MapPoint*> vpMPs = pKF->GetMapPointMatches();
 
-        for(vector<MapPoint*>::const_iterator itMP=vpMPs.begin(), itEndMP=vpMPs.end(); itMP!=itEndMP; itMP++)
+        for(auto pMP : vpMPs)
         {
 
-            MapPoint* pMP = *itMP;
             if(!pMP)
                 continue;
             if(pMP->mnTrackReferenceForFrame==mCurrentFrame.mnId)
@@ -3027,8 +3023,8 @@ void Tracking::UpdateLocalKeyFrames()
                 if(!pMP->isBad())
                 {
                     const map<KeyFrame*,tuple<int,int>> observations = pMP->GetObservations();
-                    for(map<KeyFrame*,tuple<int,int>>::const_iterator it=observations.begin(), itend=observations.end(); it!=itend; it++)
-                        keyframeCounter[it->first]++;
+                    for(const auto & observation : observations)
+                        keyframeCounter[observation.first]++;
                 }
                 else
                 {
@@ -3050,8 +3046,8 @@ void Tracking::UpdateLocalKeyFrames()
                 if(!pMP->isBad())
                 {
                     const map<KeyFrame*,tuple<int,int>> observations = pMP->GetObservations();
-                    for(map<KeyFrame*,tuple<int,int>>::const_iterator it=observations.begin(), itend=observations.end(); it!=itend; it++)
-                        keyframeCounter[it->first]++;
+                    for(const auto & observation : observations)
+                        keyframeCounter[observation.first]++;
                 }
                 else
                 {
@@ -3070,16 +3066,16 @@ void Tracking::UpdateLocalKeyFrames()
     mvpLocalKeyFrames.reserve(3*keyframeCounter.size());
 
     // All keyframes that observe a map point are included in the local map. Also check which keyframe shares most points
-    for(map<KeyFrame*,int>::const_iterator it=keyframeCounter.begin(), itEnd=keyframeCounter.end(); it!=itEnd; it++)
+    for(auto it : keyframeCounter)
     {
-        KeyFrame* pKF = it->first;
+        KeyFrame* pKF = it.first;
 
         if(pKF->isBad())
             continue;
 
-        if(it->second>max)
+        if(it.second>max)
         {
-            max=it->second;
+            max=it.second;
             pKFmax=pKF;
         }
 
@@ -3099,9 +3095,8 @@ void Tracking::UpdateLocalKeyFrames()
         const vector<KeyFrame*> vNeighs = pKF->GetBestCovisibilityKeyFrames(10);
 
 
-        for(vector<KeyFrame*>::const_iterator itNeighKF=vNeighs.begin(), itEndNeighKF=vNeighs.end(); itNeighKF!=itEndNeighKF; itNeighKF++)
+        for(auto pNeighKF : vNeighs)
         {
-            KeyFrame* pNeighKF = *itNeighKF;
             if(!pNeighKF->isBad())
             {
                 if(pNeighKF->mnTrackReferenceForFrame!=mCurrentFrame.mnId)
@@ -3114,9 +3109,8 @@ void Tracking::UpdateLocalKeyFrames()
         }
 
         const set<KeyFrame*> spChilds = pKF->GetChilds();
-        for(set<KeyFrame*>::const_iterator sit=spChilds.begin(), send=spChilds.end(); sit!=send; sit++)
+        for(auto pChildKF : spChilds)
         {
-            KeyFrame* pChildKF = *sit;
             if(!pChildKF->isBad())
             {
                 if(pChildKF->mnTrackReferenceForFrame!=mCurrentFrame.mnId)
@@ -3460,10 +3454,10 @@ void Tracking::ResetActiveMap(bool bLocMap)
     int num_lost = 0;
     cout << "mnInitialFrameId = " << mnInitialFrameId << endl;
 
-    for(list<bool>::iterator ilbL = mlbLost.begin(); ilbL != mlbLost.end(); ilbL++)
+    for(bool & ilbL : mlbLost)
     {
         if(index < mnInitialFrameId)
-            lbLost.push_back(*ilbL);
+            lbLost.push_back(ilbL);
         else
         {
             lbLost.push_back(true);
@@ -3659,9 +3653,8 @@ void Tracking::CreateNewMapPoints()
     int nnew=0;
 
     // Search matches with epipolar restriction and triangulate
-    for(size_t i=0; i<vpKFs.size(); i++)
+    for(auto pKF2 : vpKFs)
     {
-        KeyFrame* pKF2 = vpKFs[i];
         if(pKF2==mpLastKeyFrame)
             continue;
 

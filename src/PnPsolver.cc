@@ -271,9 +271,8 @@ bool PnPsolver::Refine()
 
     reset_correspondences();
 
-    for(size_t i=0; i<vIndices.size(); i++)
+    for(int idx : vIndices)
     {
-        int idx = vIndices[i];
         add_correspondence(mvP3Dw[idx].x,mvP3Dw[idx].y,mvP3Dw[idx].z,mvP2D[idx].x,mvP2D[idx].y);
     }
 
@@ -449,8 +448,8 @@ void PnPsolver::fill_M(CvMat * M,
 
 void PnPsolver::compute_ccs(const double * betas, const double * ut)
 {
-  for(int i = 0; i < 4; i++)
-    ccs[i][0] = ccs[i][1] = ccs[i][2] = 0.0f;
+  for(auto & cc : ccs)
+    cc[0] = cc[1] = cc[2] = 0.0f;
 
   for(int i = 0; i < 4; i++) {
     const double * v = ut + 12 * (11 - i);
@@ -633,9 +632,9 @@ void PnPsolver::print_pose(const double R[3][3], const double t[3])
 void PnPsolver::solve_for_sign(void)
 {
   if (pcs[2] < 0.0) {
-    for(int i = 0; i < 4; i++)
+    for(auto & cc : ccs)
       for(int j = 0; j < 3; j++)
-	ccs[i][j] = -ccs[i][j];
+	cc[j] = -cc[j];
 
     for(int i = 0; i < number_of_correspondences; i++) {
       pcs[3 * i    ] = -pcs[3 * i];

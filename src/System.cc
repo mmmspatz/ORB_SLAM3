@@ -269,8 +269,8 @@ cv::Mat System::TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, const
     }
 
     if (mSensor == System::IMU_STEREO)
-        for(size_t i_imu = 0; i_imu < vImuMeas.size(); i_imu++)
-            mpTracker->GrabImuData(vImuMeas[i_imu]);
+        for(const auto & vImuMea : vImuMeas)
+            mpTracker->GrabImuData(vImuMea);
 
     // std::cout << "start GrabImageStereo" << std::endl;
     cv::Mat Tcw = mpTracker->GrabImageStereo(imLeft,imRight,timestamp,filename);
@@ -393,8 +393,8 @@ cv::Mat System::TrackMonocular(const cv::Mat &im, const double &timestamp, const
     }
 
     if (mSensor == System::IMU_MONOCULAR)
-        for(size_t i_imu = 0; i_imu < vImuMeas.size(); i_imu++)
-            mpTracker->GrabImuData(vImuMeas[i_imu]);
+        for(const auto & vImuMea : vImuMeas)
+            mpTracker->GrabImuData(vImuMea);
 
     cv::Mat Tcw = mpTracker->GrabImageMonocular(im,timestamp,filename);
 
@@ -550,11 +550,9 @@ void System::SaveKeyFrameTrajectoryTUM(const string &filename)
     f.open(filename.c_str());
     f << fixed;
 
-    for(size_t i=0; i<vpKFs.size(); i++)
+    for(auto pKF : vpKFs)
     {
-        KeyFrame* pKF = vpKFs[i];
-
-       // pKF->SetPose(pKF->GetPose()*Two);
+        // pKF->SetPose(pKF->GetPose()*Two);
 
         if(pKF->isBad())
             continue;
@@ -718,11 +716,9 @@ void System::SaveKeyFrameTrajectoryEuRoC(const string &filename)
     f.open(filename.c_str());
     f << fixed;
 
-    for(size_t i=0; i<vpKFs.size(); i++)
+    for(auto pKF : vpKFs)
     {
-        KeyFrame* pKF = vpKFs[i];
-
-       // pKF->SetPose(pKF->GetPose()*Two);
+        // pKF->SetPose(pKF->GetPose()*Two);
 
         if(pKF->isBad())
             continue;
