@@ -681,7 +681,7 @@ vector<size_t> Frame::GetFeaturesInArea(const float &x, const float  &y, const f
             if(vCell.empty())
                 continue;
 
-            for(unsigned long j : vCell)
+            for(size_t j : vCell)
             {
                 const cv::KeyPoint &kpUn = (Nleft == -1) ? mvKeysUn[j]
                                                          : (!bRight) ? mvKeys[j]
@@ -855,7 +855,7 @@ void Frame::ComputeStereoMatches()
         const cv::Mat &dL = mDescriptors.row(iL);
 
         // Compare descriptor to right keypoints
-        for(unsigned long iR : vCandidates)
+        for(size_t iR : vCandidates)
         {
             const cv::KeyPoint &kpR = mvKeysRight[iR];
 
@@ -1142,18 +1142,18 @@ void Frame::ComputeStereoFishEyeMatches() {
     int descMatches = 0;
 
     //Check matches using Lowe's ratio
-    for(auto & matche : matches){
-        if(matche.size() >= 2 && matche[0].distance < matche[1].distance * 0.7){
+    for(auto & match : matches){
+        if(match.size() >= 2 && match[0].distance < match[1].distance * 0.7){
             //For every good match, check parallax and reprojection error to discard spurious matches
             cv::Mat p3D;
             descMatches++;
-            float sigma1 = mvLevelSigma2[mvKeys[matche[0].queryIdx + monoLeft].octave], sigma2 = mvLevelSigma2[mvKeysRight[matche[0].trainIdx + monoRight].octave];
-            float depth = static_cast<KannalaBrandt8*>(mpCamera)->TriangulateMatches(mpCamera2,mvKeys[matche[0].queryIdx + monoLeft],mvKeysRight[matche[0].trainIdx + monoRight],mRlr,mtlr,sigma1,sigma2,p3D);
+            float sigma1 = mvLevelSigma2[mvKeys[match[0].queryIdx + monoLeft].octave], sigma2 = mvLevelSigma2[mvKeysRight[match[0].trainIdx + monoRight].octave];
+            float depth = static_cast<KannalaBrandt8*>(mpCamera)->TriangulateMatches(mpCamera2,mvKeys[match[0].queryIdx + monoLeft],mvKeysRight[match[0].trainIdx + monoRight],mRlr,mtlr,sigma1,sigma2,p3D);
             if(depth > 0.0001f){
-                mvLeftToRightMatch[matche[0].queryIdx + monoLeft] = matche[0].trainIdx + monoRight;
-                mvRightToLeftMatch[matche[0].trainIdx + monoRight] = matche[0].queryIdx + monoLeft;
-                mvStereo3Dpoints[matche[0].queryIdx + monoLeft] = p3D.clone();
-                mvDepth[matche[0].queryIdx + monoLeft] = depth;
+                mvLeftToRightMatch[match[0].queryIdx + monoLeft] = match[0].trainIdx + monoRight;
+                mvRightToLeftMatch[match[0].trainIdx + monoRight] = match[0].queryIdx + monoLeft;
+                mvStereo3Dpoints[match[0].queryIdx + monoLeft] = p3D.clone();
+                mvDepth[match[0].queryIdx + monoLeft] = depth;
                 nMatches++;
             }
         }

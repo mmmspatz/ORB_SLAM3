@@ -476,8 +476,8 @@ bool TwoViewReconstruction::ReconstructF(vector<bool> &vbMatchesInliers, cv::Mat
                             cv::Mat &R21, cv::Mat &t21, vector<cv::Point3f> &vP3D, vector<bool> &vbTriangulated, float minParallax, int minTriangulated)
 {
     int N=0;
-    for(auto && vbMatchesInlier : vbMatchesInliers)
-        if(vbMatchesInlier)
+    for(bool matchesInliers : vbMatchesInliers)
+        if(matchesInliers)
             N++;
 
     // Compute Essential Matrix from Fundamental Matrix
@@ -578,8 +578,8 @@ bool TwoViewReconstruction::ReconstructH(vector<bool> &vbMatchesInliers, cv::Mat
                       cv::Mat &R21, cv::Mat &t21, vector<cv::Point3f> &vP3D, vector<bool> &vbTriangulated, float minParallax, int minTriangulated)
 {
     int N=0;
-    for(auto && vbMatchesInlier : vbMatchesInliers)
-        if(vbMatchesInlier)
+    for(bool matchesInliers : vbMatchesInliers)
+        if(matchesInliers)
             N++;
 
     // We recover 8 motion hypotheses using the method of Faugeras et al.

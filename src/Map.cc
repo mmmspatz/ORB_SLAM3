@@ -223,7 +223,7 @@ void Map::clear()
 //    for(set<MapPoint*>::iterator sit=mspMapPoints.begin(), send=mspMapPoints.end(); sit!=send; sit++)
 //        delete *sit;
 
-    for(auto pKF : mspKeyFrames)
+    for(KeyFrame* pKF : mspKeyFrames)
     {
         pKF->UpdateMap(nullptr);
 //        delete *sit;
@@ -272,7 +272,7 @@ void Map::RotateMap(const cv::Mat &R)
     cv::Mat Ryw = Tyw.rowRange(0,3).colRange(0,3);
     cv::Mat tyw = Tyw.rowRange(0,3).col(3);
 
-    for(auto pKF : mspKeyFrames)
+    for(KeyFrame* pKF : mspKeyFrames)
     {
         cv::Mat Twc = pKF->GetPoseInverse();
         cv::Mat Tyc = Tyw*Twc;
@@ -283,7 +283,7 @@ void Map::RotateMap(const cv::Mat &R)
         cv::Mat Vw = pKF->GetVelocity();
         pKF->SetVelocity(Ryw*Vw);
     }
-    for(auto pMP : mspMapPoints)
+    for(MapPoint* pMP : mspMapPoints)
     {
         pMP->SetWorldPos(Ryw*pMP->GetWorldPos()+tyw);
         pMP->UpdateNormalAndDepth();
@@ -305,7 +305,7 @@ void Map::ApplyScaledRotation(const cv::Mat &R, const float s, const bool bScale
     cv::Mat Ryw = Tyw.rowRange(0,3).colRange(0,3);
     cv::Mat tyw = Tyw.rowRange(0,3).col(3);
 
-    for(auto pKF : mspKeyFrames)
+    for(KeyFrame* pKF : mspKeyFrames)
     {
         cv::Mat Twc = pKF->GetPoseInverse();
         Twc.rowRange(0,3).col(3)*=s;
@@ -321,7 +321,7 @@ void Map::ApplyScaledRotation(const cv::Mat &R, const float s, const bool bScale
             pKF->SetVelocity(Ryw*Vw*s);
 
     }
-    for(auto pMP : mspMapPoints)
+    for(MapPoint* pMP : mspMapPoints)
     {
         pMP->SetWorldPos(s*Ryw*pMP->GetWorldPos()+tyw);
         pMP->UpdateNormalAndDepth();
@@ -400,8 +400,7 @@ void Map::PrintEssentialGraph()
 
         cout << strHeader << "KF: " << pKFi->mnId << endl;
 
-        set<KeyFrame*> spKFiChilds = pKFi->GetChilds();
-        for(KeyFrame* pKFj : spKFiChilds)
+        for(KeyFrame* pKFj : pKFi->GetChilds())
         {
             vpChilds.push_back(pKFj);
             vstrHeader.push_back(strHeader+"--");
@@ -441,8 +440,7 @@ bool Map::CheckEssentialGraph(){
     {
         count++;
         KeyFrame* pKFi = vpChilds[i];
-        set<KeyFrame*> spKFiChilds = pKFi->GetChilds();
-        for(KeyFrame* pKFj : spKFiChilds)
+        for(KeyFrame* pKFj : pKFi->GetChilds())
             vpChilds.push_back(pKFj);
     }
 
@@ -545,8 +543,7 @@ void Map::PreSave(std::set<GeometricCamera*> &spCams)
         {
             nMPWithoutObs++;
         }
-        map<KeyFrame*, std::tuple<int,int>> mpObs = pMPi->GetObservations();
-        for(auto & mpOb : mpObs)
+        for(auto & mpOb : pMPi->GetObservations())
         {
             if(mpOb.first->GetMap() != this)
             {

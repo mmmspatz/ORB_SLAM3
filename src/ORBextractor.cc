@@ -469,7 +469,7 @@ namespace ORB_SLAM3
 
     static void computeOrientation(const Mat& image, vector<KeyPoint>& keypoints, const vector<int>& umax)
     {
-        for (auto & keypoint : keypoints)
+        for (KeyPoint & keypoint : keypoints)
         {
             keypoint.angle = IC_Angle(image, keypoint.pt, umax);
         }
@@ -506,7 +506,7 @@ namespace ORB_SLAM3
         n4.vKeys.reserve(vKeys.size());
 
         //Associate points to childs
-        for(auto & kp : vKeys)
+        for(const cv::KeyPoint & kp : vKeys)
         {
             if(kp.pt.x<n1.UR.x)
             {
@@ -559,7 +559,7 @@ namespace ORB_SLAM3
         }
 
         //Associate points to childs
-        for(const auto & kp : vToDistributeKeys)
+        for(const cv::KeyPoint & kp : vToDistributeKeys)
         {
             vpIniNodes[kp.pt.x/hX]->vKeys.push_back(kp);
         }
@@ -736,18 +736,17 @@ namespace ORB_SLAM3
         // Retain the best point in each node
         vector<cv::KeyPoint> vResultKeys;
         vResultKeys.reserve(nfeatures);
-        for(auto & lNode : lNodes)
+        for(ExtractorNode & lNode : lNodes)
         {
-            vector<cv::KeyPoint> &vNodeKeys = lNode.vKeys;
-            cv::KeyPoint* pKP = &vNodeKeys[0];
+            cv::KeyPoint* pKP = &lNode.vKeys[0];
             float maxResponse = pKP->response;
 
-            for(size_t k=1;k<vNodeKeys.size();k++)
+            for(cv::KeyPoint & key : lNode.vKeys)
             {
-                if(vNodeKeys[k].response>maxResponse)
+                if(key.response>maxResponse)
                 {
-                    pKP = &vNodeKeys[k];
-                    maxResponse = vNodeKeys[k].response;
+                    pKP = &key;
+                    maxResponse = key.response;
                 }
             }
 
@@ -839,11 +838,11 @@ namespace ORB_SLAM3
 
                     if(!vKeysCell.empty())
                     {
-                        for(auto & vit : vKeysCell)
+                        for(cv::KeyPoint & key : vKeysCell)
                         {
-                            vit.pt.x+=j*wCell;
-                            vit.pt.y+=i*hCell;
-                            vToDistributeKeys.push_back(vit);
+                            key.pt.x+=j*wCell;
+                            key.pt.y+=i*hCell;
+                            vToDistributeKeys.push_back(key);
                         }
                     }
 
@@ -1030,13 +1029,13 @@ namespace ORB_SLAM3
                         keysCell.resize(nToRetain[i][j]);
 
 
-                    for(auto & k : keysCell)
+                    for(cv::KeyPoint & key : keysCell)
                     {
-                        k.pt.x+=iniXCol[j];
-                        k.pt.y+=iniYRow[i];
-                        k.octave=level;
-                        k.size = scaledPatchSize;
-                        keypoints.push_back(k);
+                        key.pt.x+=iniXCol[j];
+                        key.pt.y+=iniYRow[i];
+                        key.octave=level;
+                        key.size = scaledPatchSize;
+                        keypoints.push_back(key);
                     }
                 }
             }
@@ -1121,7 +1120,7 @@ namespace ORB_SLAM3
 
             float scale = mvScaleFactor[level]; //getScale(level, firstLevel, scaleFactor);
             int i = 0;
-            for (auto & keypoint : keypoints){
+            for (cv::KeyPoint & keypoint : keypoints){
 
                 // Scale keypoint coordinates
                 if (level != 0){

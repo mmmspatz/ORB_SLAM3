@@ -548,10 +548,10 @@ int MapPoint::PredictScale(const float &currentDist, Frame* pF)
 void MapPoint::PrintObservations()
 {
     cout << "MP_OBS: MP " << mnId << endl;
-    for(auto & mObservation : mObservations)
+    for(auto & observation : mObservations)
     {
-        KeyFrame* pKFi = mObservation.first;
-        tuple<int,int> indexes = mObservation.second;
+        KeyFrame* pKFi = observation.first;
+        tuple<int,int> indexes = observation.second;
         int leftIndex = get<0>(indexes), rightIndex = get<1>(indexes);
         cout << "--OBS in KF " << pKFi->mnId << " in map " << pKFi->GetMap()->GetId() << endl;
     }
@@ -578,13 +578,13 @@ void MapPoint::PreSave(set<KeyFrame*>& spKF,set<MapPoint*>& spMP)
     mBackupObservationsId1.clear();
     mBackupObservationsId2.clear();
     // Save the id and position in each KF who view it
-    for(const auto & mObservation : mObservations)
+    for(const auto & observation : mObservations)
     {
-        KeyFrame* pKFi = mObservation.first;
+        KeyFrame* pKFi = observation.first;
         if(spKF.find(pKFi) != spKF.end())
         {
-            mBackupObservationsId1[mObservation.first->mnId] = get<0>(mObservation.second);
-            mBackupObservationsId2[mObservation.first->mnId] = get<1>(mObservation.second);
+            mBackupObservationsId1[observation.first->mnId] = get<0>(observation.second);
+            mBackupObservationsId2[observation.first->mnId] = get<1>(observation.second);
         }
         else
         {
@@ -616,11 +616,11 @@ void MapPoint::PostLoad(map<long unsigned int, KeyFrame*>& mpKFid, map<long unsi
 
     mObservations.clear();
 
-    for(auto it : mBackupObservationsId1)
+    for(const auto & obsId1 : mBackupObservationsId1)
     {
-        KeyFrame* pKFi = mpKFid[it.first];
-        map<long unsigned int, int>::const_iterator it2 = mBackupObservationsId2.find(it.first);
-        std::tuple<int, int> indexes = tuple<int,int>(it.second,it2->second);
+        KeyFrame* pKFi = mpKFid[obsId1.first];
+        const auto & obsId2 = *mBackupObservationsId2.find(obsId1.first);
+        std::tuple<int, int> indexes = tuple<int,int>(obsId1.second,obsId2.second);
         if(pKFi)
         {
            mObservations[pKFi] = indexes;
